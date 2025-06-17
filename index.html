@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>한국 역사적 인물 퀴즈</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .photo {
+      width: 300px;
+      height: 300px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+      object-fit: cover;
+    }
+    input[type="text"] {
+      width: 250px;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: 2px solid #ccc;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus {
+      border-color: #4CAF50;
+    }
+    button {
+      margin-left: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 30px;
+      font-size: 36px;
+      font-weight: bold;
+      color: white;
+      padding: 20px 50px;
+      border-radius: 12px;
+      display: none;
+    }
+    .correct {
+      background-color: #4CAF50;
+    }
+    .wrong {
+      background-color: #f44336;
+    }
+  </style>
+</head>
+<body>
+  <img id="photo" src="1.jpg" alt="문제 이미지" class="photo" />
+
+  <div>
+    <input type="text" id="answerInput" placeholder="인물 이름을 입력하세요" autocomplete="off" />
+    <button onclick="checkAnswer()">제출</button>
+  </div>
+
+  <div class="result" id="result">정답!</div>
+
+  <script>
+    const quizData = [
+      { img: "1.jpg", answer: "세종대왕" },
+      { img: "2.jpg", answer: "이순신" },
+      { img: "3.jpg", answer: "신사임당" },
+      { img: "4.jpg", answer: "의자왕" },
+      { img: "5.jpg", answer: "김구" },
+   
+      
+    ];
+
+    let currentIndex = 0;
+
+    const photo = document.getElementById('photo');
+    const answerInput = document.getElementById('answerInput');
+    const resultDiv = document.getElementById('result');
+
+    function loadQuiz() {
+      resultDiv.style.display = 'none';
+      resultDiv.className = 'result';
+      answerInput.value = '';
+      answerInput.focus();
+
+      if (currentIndex < quizData.length) {
+        photo.src = quizData[currentIndex].img;
+        photo.alt = `문제 이미지 ${currentIndex + 1}`;
+        photo.style.display = 'block';
+        answerInput.style.display = 'inline-block';
+        document.querySelector('button').style.display = 'inline-block';
+      } else {
+        photo.style.display = 'none';
+        answerInput.style.display = 'none';
+        document.querySelector('button').style.display = 'none';
+        resultDiv.textContent = "모든 문제 완료! 수고하셨습니다.";
+        resultDiv.className = 'result correct';
+        resultDiv.style.display = 'block';
+      }
+    }
+
+    function checkAnswer() {
+      const userAnswer = answerInput.value.trim();
+      if (currentIndex >= quizData.length) return;
+
+      if (userAnswer === quizData[currentIndex].answer) {
+        resultDiv.textContent = "정답!";
+        resultDiv.className = 'result correct';
+        resultDiv.style.display = 'block';
+        currentIndex++;
+        setTimeout(loadQuiz, 1500);
+      } else {
+        resultDiv.textContent = "땡!";
+        resultDiv.className = 'result wrong';
+        resultDiv.style.display = 'block';
+      }
+    }
+
+    answerInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        checkAnswer();
+      }
+    });
+
+    loadQuiz();
+  </script>
+</body>
+</html>
